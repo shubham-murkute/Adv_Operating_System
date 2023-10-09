@@ -50,7 +50,7 @@ int main(int argc,char **argv) {
 		hpfnp[ctr] = highestPriorityFirstNP(processList);
 
 		//Round Robin
-		rr[ctr] = roundRobinPreemptive(processList);
+		rr[ctr] = roundRobinP(processList,1);
 		
 		ctr++;
 	}
@@ -125,7 +125,7 @@ int main(int argc,char **argv) {
 	printf("Average Throughput: %.1f\n",final[0].avg_throughput);
 	printf("\n");
 
-		printf("ALGORITHM:Shortest Job First [non-reemptive]:\n");
+	printf("ALGORITHM:Shortest Job First [non-reemptive]:\n");
 	printf("Average Response Time : %.1f\n",final[1].avg_response_time);
 	printf("Average Wait Time : %.1f\n",final[1].avg_wait_time);
 	printf("Average Turn Around Time :%.1f\n",final[1].avg_turnaround);
@@ -158,5 +158,6 @@ int main(int argc,char **argv) {
     	printf("Average Wait Time : %.1f\n", final[3].avg_wait_time);
     	printf("Average Turn Around Time :%.1f\n", final[3].avg_turnaround);
     	printf("Average throughput :%.1f\n", final[3].avg_throughput);
+	printf("\n");
 	
 }
