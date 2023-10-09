@@ -48,6 +48,9 @@ int main(int argc,char **argv) {
 		
 		//Highest Priority First Non Preemptive
 		hpfnp[ctr] = highestPriorityFirstNP(processList);
+
+		//Round Robin
+		rr[ctr] = roundRobinPreemptive(processList);
 		
 		ctr++;
 	}
@@ -64,7 +67,7 @@ int main(int argc,char **argv) {
 	for (int i = 0; i<5 ; i++)
 	{
                         //FCFS
-			final[0].avg_response_time += fcfs[i].avg_response_time;
+		       final[0].avg_response_time += fcfs[i].avg_response_time;
                        final[0].avg_wait_time += fcfs[i].avg_wait_time;
                        final[0].avg_turnaround += fcfs[i].avg_turnaround;
                        final[0].avg_throughput += fcfs[i].avg_throughput;
@@ -85,7 +88,13 @@ int main(int argc,char **argv) {
 			final[5].avg_response_time += hpfnp[i].avg_response_time;
 			final[5].avg_wait_time += hpfnp[i].avg_wait_time;
 			final[5].avg_turnaround += hpfnp[i].avg_turnaround;
-			final[5].avg_throughput += hpfnp[i].avg_throughput;		
+			final[5].avg_throughput += hpfnp[i].avg_throughput;	
+
+			//Round Robin
+			final[3].avg_response_time += rr[i].avg_response_time;
+        		final[3].avg_wait_time += rr[i].avg_wait_time;
+        		final[3].avg_turnaround += rr[i].avg_turnaround;
+        		final[3].avg_throughput += rr[i].avg_throughput;
 			
 	}
 
@@ -117,18 +126,24 @@ int main(int argc,char **argv) {
 	printf("Average throughput :%.1f\n",final[2].avg_throughput);
         printf("\n");
     
-    printf("ALGORITHM:Highest Priority First(HPFP) [Preemptive]:\n");
+    	printf("ALGORITHM:Highest Priority First(HPFP) [Preemptive]:\n");
 	printf("Average Response Time : %.1f\n",final[4].avg_response_time);
 	printf("Average Wait Time : %.1f\n",final[4].avg_wait_time);
 	printf("Average Turn Around Time :%.1f\n",final[4].avg_turnaround);
 	printf("Average throughput :%.1f\n",final[4].avg_throughput);
         printf("\n");
     
-    printf("ALGORITHM:Highest Priority First(HPFNP) [Non Preemptive]:\n");
+    	printf("ALGORITHM:Highest Priority First(HPFNP) [Non Preemptive]:\n");
 	printf("Average Response Time : %.1f\n",final[5].avg_response_time);
 	printf("Average Wait Time : %.1f\n",final[5].avg_wait_time);
 	printf("Average Turn Around Time :%.1f\n",final[5].avg_turnaround);
 	printf("Average throughput :%.1f\n",final[5].avg_throughput);
         printf("\n");
+
+	printf("ALGORITHM: Round Robin (RR):\n");
+    	printf("Average Response Time : %.1f\n", final[3].avg_response_time);
+    	printf("Average Wait Time : %.1f\n", final[3].avg_wait_time);
+    	printf("Average Turn Around Time :%.1f\n", final[3].avg_turnaround);
+    	printf("Average throughput :%.1f\n", final[3].avg_throughput);
 	
 }
