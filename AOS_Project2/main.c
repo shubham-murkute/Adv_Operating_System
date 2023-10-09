@@ -71,6 +71,12 @@ int main(int argc,char **argv) {
                        final[0].avg_wait_time += fcfs[i].avg_wait_time;
                        final[0].avg_turnaround += fcfs[i].avg_turnaround;
                        final[0].avg_throughput += fcfs[i].avg_throughput;
+
+			//SJF
+			final[1].avg_response_time += sjf[i].avg_response_time;
+			final[1].avg_wait_time += sjf[i].avg_wait_time;
+			final[1].avg_turnaround += sjf[i].avg_turnaround;
+			final[1].avg_throughput += sjf[i].avg_throughput;
 			
                        //SRTF
 			final[2].avg_response_time += srf[i].avg_response_time;
@@ -118,6 +124,13 @@ int main(int argc,char **argv) {
 	printf("Average Turn Around Time: %.1f\n",final[0].avg_turnaround);
 	printf("Average Throughput: %.1f\n",final[0].avg_throughput);
 	printf("\n");
+
+		printf("ALGORITHM:Shortest Job First [non-reemptive]:\n");
+	printf("Average Response Time : %.1f\n",final[1].avg_response_time);
+	printf("Average Wait Time : %.1f\n",final[1].avg_wait_time);
+	printf("Average Turn Around Time :%.1f\n",final[1].avg_turnaround);
+	printf("Average throughput :%.1f\n",final[1].avg_throughput);
+        printf("\n");
 	
 	printf("ALGORITHM:Shortest Remaining Time First(SRTF) [Preemptive]:\n");
 	printf("Average Response Time : %.1f\n",final[2].avg_response_time);
