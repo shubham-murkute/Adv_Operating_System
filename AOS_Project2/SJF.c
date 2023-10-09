@@ -16,6 +16,17 @@ process_stat *createProcessStat2(process *proc) {
 	return ps;
 }
 
+int compareRemainingTimes(void * data1, void * data2)
+{
+  process_stat * ps1 = (process_stat *) data1;
+	process_stat * ps2 = (process_stat *) data2;
+	if(((((process *)ps1->proc)->runTime) - (ps1->runTime)) < ((((process *)ps2->proc)->runTime) - (ps2->runTime))) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
+
 
 
 int compareRunTimes(void *data1, void *data2) {
@@ -55,13 +66,13 @@ average_stats shortestJobFirstNP(linked_list *processes) {
 				enqueue(processQueue,createProcessStat2(newProcess));
 				procPtr = procPtr->next;
 			}
+			// Sort the processQueue by runTime (shortest runTime first)
+			sort(processQueue, compareRemainingTimes);
 		}
 
-        // Sort the processQueue by runTime (shortest runTime first)
 
 		//check process queue and schedule it if there is no scheduled process now.
 		if(scheduledProcess == NULL && processQueue->size > 0) {
-            sort(processQueue, compareRunTimes);
 			scheduledProcess = (process_stat *) dequeue(processQueue);
 		}
 

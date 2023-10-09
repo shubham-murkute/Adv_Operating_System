@@ -39,6 +39,9 @@ int main(int argc,char **argv) {
 
 		//First Come First Serve
 		fcfs[ctr] = firstComeFirstServeNP(processList);
+
+		//Shortest job first
+		sjf[ctr] = shortestJobFirstNP(processList);
 		
 	        //shortest remaining time first
 		srf[ctr] = shortestRemainingTimeP(processList);
