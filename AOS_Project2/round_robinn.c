@@ -1,160 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "stat.h"
+#include "utility.h"
 
-#define NUM 20
+process_stat * createProcessStat(process* proc);
 
-typedef struct process {
-    int name;
-    int burstTime;
-    int arrivalTime;
-    int waitTime;
-} process;
+average_stats roundRobinP(linked_list * processes, int time_slice) {
+	int t = 0;
 
-typedef struct processQueue {
-    process list[NUM];
-    int size;
-    int front;
-    int rear;
-} processQueue;
+	//Create Process Queue
+	queue *prcQueue = (queue *)createQueue();
+	node * prcPtr = processes->head;
+	if(processes->head == NULL) {
+		fprintf(stderr,"No Process to schedule\n");
+	}
+	//while process queue is not empty or time quanta is less than 100
+	process_stat * scheduled_process = NULL;
 
-typedef struct average_stats {
-    float avg_wait_time;
-    float avg_turnaround;
-    float avg_response_time;
-    float throughput;
-} average_stats;
+	linked_list *ll = createLinkedList();
+	printf("\nRound Robbin:\n");
+	node * cur_node = NULL;
+	int cur_run = 0;
+	while(t<100 || prcQueue->size > 0) {
+		//check for incoming new process and enqueue it in the queue only when its arrival time is before 100
+		if(prcPtr != NULL && t<100) {
+			process * new_process = (process *)(prcPtr->data);
+			while(prcPtr!=NULL && new_process->arrivalTime <= t) {
+				enqueue(prcQueue,createProcessStat(new_process));
+				prcPtr = prcPtr->next;
+				if(prcPtr!=NULL)
+					new_process = (process *)(prcPtr->data);
+			}
+		}
 
-processQueue* initQueue() {
-    processQueue *pq = (processQueue*) malloc(sizeof(processQueue));
-    pq->size = 0;
-    pq->front = 0;
-    pq->rear = -1;
-    return pq;
-}
+		//if there is no scheduled process, then check process queue and schedule it
+		if(cur_node == NULL) {
+			cur_run = 0;
+			cur_node = prcQueue->head;
+		} else if(cur_run == time_slice) {
+			cur_run = 0;
+			cur_node = cur_node->next;
+			if(cur_node == NULL) {
+				cur_node = prcQueue->head;
+			}
+		}
 
-void enQueue(processQueue *pq, process *p) {
-    pq->size++;
-    pq->rear = (pq->rear + 1) % NUM;
-    pq->list[pq->rear] = *p;		
-}
+		if(cur_node != NULL) {
+			scheduled_process = (process_stat *) cur_node->data;
+			process * proc = scheduled_process->proc;
 
-void deQueue(processQueue *pq, int time, int ct[]) {
-    ct[pq->list[pq->front].name] = time;
-    pq->size--;
-    pq->front = (pq->front + 1) % NUM;
-}
+			if(t>=100) {
+				if(scheduled_process->startTime == -1) {
+					//Don't start any new process, remove it from prcQueue
+					free(scheduled_process);
+					//dequeue(scheduled_process);
+					node * next = cur_node->next;
+					removeNode(prcQueue,cur_node->data);
+					cur_node = next;
+					cur_run = 0;
+					continue;
+				}
+			}
+			//add current running process to the time chart
+			printf("%c",proc->pid);
+			cur_run++;
+			//update current processes stat
+			if(scheduled_process->startTime == -1) {
+				scheduled_process->startTime = t;
+			}
+			scheduled_process->runTime++;
 
-void sortQueue(processQueue *pq) {
-    int i;
-    process temp = pq->list[pq->front];
-    for(i = pq->front; i < pq->rear; i++) {
-        pq->list[i] = pq->list[i+1];
-    }
-    pq->list[pq->rear] = temp;
-}
+			if(scheduled_process->runTime >= proc->runTime) {
+				scheduled_process->endTime = t;
+				addNode(ll,scheduled_process);
+				node * next = cur_node -> next;
+				removeNode(prcQueue, cur_node->data);
+				cur_node = next;
+				cur_run = 0;
+			}
+		} else {
+			printf("_");
+		}
+		//increase the time
+		t++;
+	}
 
-void sortListByAT(process list[]) {
-    int i, j;
-    for(i = 0; i < NUM; i++) {
-        for(j = i+1; j < NUM; j++) {
-            if(list[i].arrivalTime > list[j].arrivalTime) {
-                process temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
-            }
-        }
-    }
-}
+	return printPolicyStat(ll);
 
-void checkProcessQueue(processQueue *pq, process list[], int time) {
-    int i;
-    for(i = 0; i < NUM; i++) {
-        if(time == list[i].arrivalTime) {
-            enQueue(pq, &list[i]);
-        }
-    } 
-}
-
-void run(process *p) {
-    printf("%d ", p->name);
-    p->burstTime--;	
-}
-
-void wait(process *p) {
-    p->waitTime++;
-}
-
-average_stats roundRobinPreemptive(process list[]) {
-    srand(200);
-    int i, time, timeProcessed = 0;
-    int totalWaitTime = 0;	
-    int totalBurstTime = 0;
-    int bt[NUM], tat = 0;
-    int completionTime[NUM];
-    float max = -1e9, min = 1e9;
-
-    for(i = 0; i < NUM; i++) {	
-        list[i].burstTime = (rand() % 10) + 1;
-        bt[i] = list[i].burstTime;
-        list[i].arrivalTime = rand() % 100;
-        list[i].name = i;
-        list[i].waitTime = 0;
-        totalBurstTime += list[i].burstTime;
-    }
-  
-    sortListByAT(list);
-    processQueue *queue = initQueue();
-
-    for(time = 0; time < totalBurstTime; time++) {
-        timeProcessed++;
-        checkProcessQueue(queue, list, time);
-        if(queue->size != 0) {
-            run(&queue->list[queue->front]);
-        } else {
-            printf("CPU Idle\n");
-        }
-
-        for(i = queue->front+1; i <= queue->rear; i++) {
-            wait(&queue->list[i]);
-        }
-
-        if(queue->list[queue->front].burstTime == 0) {
-            totalWaitTime += queue->list[queue->front].waitTime;
-            deQueue(queue, timeProcessed, completionTime);
-            timeProcessed = 0;
-        }
-    }
-
-    for(i = 0; i < NUM; i++) {
-        tat += list[i].waitTime + bt[i];
-    }
-
-    for(int l = 0; l < NUM; l++) {
-        if(min > list[l].arrivalTime)
-            min = list[l].arrivalTime;
-    }
-
-    for(int ll = 0; ll < NUM; ll++) {
-        if(max < completionTime[ll])
-            max = completionTime[ll];
-    }
-
-    average_stats avg;
-    avg.avg_wait_time = (float)totalWaitTime / NUM;
-    avg.avg_turnaround = (float)tat / NUM;
-    avg.avg_response_time = (float)totalWaitTime / NUM;
-    avg.throughput = NUM / (max - min);
-
-    return avg;
-}
-
-int main() {
-    process list[NUM];
-    average_stats avg = roundRobinPreemptive(list);
-
-    printf("\nAverage wait time - %f\n", avg.avg_wait_time);
-    printf("\nAverage turn around time - %f\n", avg.avg_turnaround);
-    printf("\nAverage response time - %f\n", avg.avg_response_time);
-    printf("Throughput - %f\n", avg.throughput);
-    return 0;
 }
