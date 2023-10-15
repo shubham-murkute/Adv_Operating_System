@@ -10,7 +10,12 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int main (int argc, char **argv){
 
-    //initialize the concert seats
+    if (argc < 2){
+        fprintf(stderr, "Error: no customers supplied. \nTo correctly use program type ./main N where N is the number of customers\n");
+        exit(1); // Exit with a non-zero exit code to indicate an error
+    }
+
+    //Initialize the concert seats
     ConcertSeats concertSeats;
     int i, j; // Declare the loop counters here
 
@@ -22,12 +27,13 @@ int main (int argc, char **argv){
     concertSeats.availableSeats = 100;
     printConcertSeats(&concertSeats);
 
-    //generate customer qeues
-    linked_list *customerList1 = generateCustomers(10);
-    linked_list *customerList2 = generateCustomers(10);
+    //Generate customer qeues
+    linked_list *customerList1 = generateCustomers(atoi(argv[1]));
+    linked_list *customerList2 = generateCustomers(atoi(argv[1]));
+    //Generate more per your needs
 
 
-    /* Unfinished Ugly Code, 
+    //Two Low Seller Threads
     ThreadArgs threadArgs1;
     threadArgs1.customerList = customerList1;
     threadArgs1.sellerName = "L1";
@@ -49,10 +55,9 @@ int main (int argc, char **argv){
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
 
-    //lowSeller(customerList, "L111", &concertSeats);
     printConcertSeats(&concertSeats);
 
     pthread_mutex_destroy(&mutex);
-    */
+    
 
 }
