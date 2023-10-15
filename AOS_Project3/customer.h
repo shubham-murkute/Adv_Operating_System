@@ -18,6 +18,7 @@ Customer *getCopyofCustomer(Customer * customer);
 linked_list *generateCustomers(int n);
 
 void printCustomers(linked_list *customer_list);
+void printCustomer(Customer *customer);
 
 
 #endif

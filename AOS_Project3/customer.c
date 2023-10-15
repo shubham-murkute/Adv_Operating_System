@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "customer.h"
-#include "utility.h"
 #include <time.h>
 
 int compare(void *data1, void *data2) {
@@ -79,4 +78,12 @@ void printCustomers(linked_list *customer_list) {
         printf("\n");
         ptr = ptr->next;
     }
+}
+
+void printCustomer(Customer *customer){
+	printf("Customer ID: %c\n", customer->id);
+	printf("Arrival Time: %.1f\n", customer->arrivalTime);
+	printf("Response Time: %.1f\n", customer->responseTime);
+    printf("Waiting Time: %.1f\n", customer->waitingTime);
+	printf("\n");
 }

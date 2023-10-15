@@ -27,15 +27,15 @@ int main (int argc, char **argv){
     linked_list *customerList2 = generateCustomers(10);
 
 
-
+    /* Unfinished Ugly Code, 
     ThreadArgs threadArgs1;
     threadArgs1.customerList = customerList1;
-    threadArgs1.sellerName = "L111";
+    threadArgs1.sellerName = "L1";
     threadArgs1.concertSeats = &concertSeats;
 
     ThreadArgs threadArgs2;
     threadArgs2.customerList = customerList2;
-    threadArgs2.sellerName = "L222";
+    threadArgs2.sellerName = "L2";
     threadArgs2.concertSeats = &concertSeats;
 
     pthread_t thread1, thread2; // Define two threads
@@ -53,7 +53,6 @@ int main (int argc, char **argv){
     printConcertSeats(&concertSeats);
 
     pthread_mutex_destroy(&mutex);
-
-    
+    */
 
 }
