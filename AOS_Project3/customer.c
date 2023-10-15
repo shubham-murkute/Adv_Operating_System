@@ -40,7 +40,7 @@ linked_list *generateCustomers(int n) {
 
 	while(n--) {
 
-        arrivalTime = (float)((rand() % 990) + 1) / 10;
+        arrivalTime = (float)((rand() % 590) + 1) / 10;
         responseTime = 0;
         waitingTime = 0;
 		Customer *c = createCustomer(id, arrivalTime, responseTime, waitingTime);
