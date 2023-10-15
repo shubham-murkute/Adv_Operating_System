@@ -91,7 +91,8 @@ void* lowSeller(void *args){
         customerPtr = customerPtr->next;        
 
     }
-    //printCustomers(processedCustomers);
+    CustomersStats *customersStats = createCustomersStats(processedCustomers,sellerName);
+    threadArgs->customersStats = customersStats;
 
 
 }

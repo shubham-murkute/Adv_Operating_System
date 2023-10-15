@@ -38,11 +38,15 @@ int main (int argc, char **argv){
     threadArgs1.customerList = customerList1;
     threadArgs1.sellerName = "L1";
     threadArgs1.concertSeats = &concertSeats;
+    CustomersStats *customersStats1 = (CustomersStats*)malloc(sizeof(CustomersStats));
+    threadArgs1.customersStats = customersStats1;
 
     ThreadArgs threadArgs2;
     threadArgs2.customerList = customerList2;
     threadArgs2.sellerName = "L2";
     threadArgs2.concertSeats = &concertSeats;
+    CustomersStats *customersStats2 = (CustomersStats*)malloc(sizeof(CustomersStats));
+    threadArgs2.customersStats = customersStats2;
 
     pthread_t thread1, thread2; // Define two threads
 
@@ -56,6 +60,9 @@ int main (int argc, char **argv){
     pthread_join(thread2, NULL);
 
     printConcertSeats(&concertSeats);
+    printCustomersStats(threadArgs1.customersStats);
+    printCustomersStats(threadArgs2.customersStats);
+
 
     pthread_mutex_destroy(&mutex);
     

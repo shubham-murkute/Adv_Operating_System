@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
 
 // Declare the mutex lock
 extern pthread_mutex_t mutex;
@@ -15,8 +16,10 @@ typedef struct{
     linked_list *customerList;
     const char* sellerName;     
     ConcertSeats* concertSeats;
-
+    CustomersStats *customersStats;
 }ThreadArgs;
+
+
 
 void *lowSeller(void *args);
 
