@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h> 
+#include <stdlib.h>
 #include "utility.h"
 
 typedef struct {
@@ -10,17 +12,40 @@ typedef struct {
     */
     char seatChart[10][10][5];
     int availableSeats;
-} Seats
+} Seats;
+
+void printConcertSeats(Seats *concertSeats) {
+    int i, j; // Declare the loop counters here
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++) {
+            printf("%s ", concertSeats->seatChart[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
 
 int main (int argc, char **argv){
 
+    //initialize the concert seats
     Seats concertSeats;
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
+    int i, j; // Declare the loop counters here
+
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++) {
             strcpy(concertSeats.seatChart[i][j], "----");
         }
     }
     concertSeats.availableSeats = 100;
+    printConcertSeats(&concertSeats);
+
+    //generate customer qeues
+    linked_list *customerList = generateCustomers(10);
+    printCustomers(customerList);
+
+
+
     
 
 }
