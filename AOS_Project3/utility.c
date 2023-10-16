@@ -6,7 +6,7 @@
 
 //create new linked_list//
 
-linked_list * create_linked_list()
+linked_list * Create_Linked_List()
 {
 	linked_list * new_ll =  (linked_list*) malloc(sizeof(linked_list));
 	new_ll->head = NULL;
@@ -18,7 +18,7 @@ linked_list * create_linked_list()
 
 
 //create a new node//
-node* create_node(void* data)
+node* Create_Node(void* data)
 {
 	node* new_node = (node*) malloc(sizeof(node));
 	new_node->data = data;
@@ -28,9 +28,9 @@ node* create_node(void* data)
 }
 
 // Add a node to existing linked list//
-void add_node(linked_list * ll, void * data)
+void AddNode(linked_list * ll, void * data)
 {
-	node * new_node = create_node(data);
+	node * new_node = Create_Node(data);
 	if(ll->size == 0)
 	{
 		ll->head = new_node;
@@ -45,69 +45,69 @@ void add_node(linked_list * ll, void * data)
 }
 
 // Remove a node from existing linked_list //
-void remove_data(linked_list* ll, void * data)
+void RemoveData(linked_list* ll, void * data)
 {
-	node* current_node = ll->head;
+	node* curr_node = ll->head;
 
-	while(current_node != NULL && current_node->data != data) {
-		current_node = current_node->next;
+	while(curr_node != NULL && curr_node->data != data) {
+		curr_node = curr_node->next;
 	}
 
-	if(current_node != NULL) {
-		if(current_node->prev != NULL) {
-			current_node->prev->next = current_node->next;
+	if(curr_node != NULL) {
+		if(curr_node->prev != NULL) {
+			curr_node->prev->next = curr_node->next;
 		}
-		if(current_node->next != NULL) {
-			current_node->next->prev = current_node->prev;
+		if(curr_node->next != NULL) {
+			curr_node->next->prev = curr_node->prev;
 		}
-		if(ll->head == current_node) {
-			ll->head = current_node->next;
+		if(ll->head == curr_node) {
+			ll->head = curr_node->next;
 		}
-		if(ll->tail == current_node) {
-			ll->tail = current_node->prev;
+		if(ll->tail == curr_node) {
+			ll->tail = curr_node->prev;
 		}
 		ll->size --;
-		free(current_node);
+		free(curr_node);
 	}
 }
 
-void remove_node(linked_list* ll, node * current_node) {
-	if(current_node != NULL) {
-		if(current_node->prev != NULL) {
-			current_node->prev->next = current_node->next;
+void RemoveNode(linked_list* ll, node * curr_node) {
+	if(curr_node != NULL) {
+		if(curr_node->prev != NULL) {
+			curr_node->prev->next = curr_node->next;
 		}
-		if(current_node->next != NULL) {
-			current_node->next->prev = current_node->prev;
+		if(curr_node->next != NULL) {
+			curr_node->next->prev = curr_node->prev;
 		}
-		if(ll->head == current_node) {
-			ll->head = current_node->next;
+		if(ll->head == curr_node) {
+			ll->head = curr_node->next;
 		}
-		if(ll->tail == current_node) {
-			ll->tail = current_node->prev;
+		if(ll->tail == curr_node) {
+			ll->tail = curr_node->prev;
 		}
 		ll->size --;
-		free(current_node);
+		free(curr_node);
 	}
 }
 
 // Remove a node from existing linked_list //
-void remove_head(linked_list* ll)
+void RemoveHead(linked_list* ll)
 {
-	node * current_node = ll->head;
-	if(current_node != NULL) {
-		ll->head = current_node->next;
-		if(ll->tail == current_node) {
-			ll->tail = current_node->prev;
+	node * curr_node = ll->head;
+	if(curr_node != NULL) {
+		ll->head = curr_node->next;
+		if(ll->tail == curr_node) {
+			ll->tail = curr_node->prev;
 		}
 		ll->size --;
-		free(current_node);
+		free(curr_node);
 	}
 }
 
 // Add a new node after a particular node in an existing linked_list//
-void add_after(linked_list* ll, node *after_node, void *data)
+void AddAfter(linked_list* ll, node *after_node, void *data)
 {
-	node* new_node = create_node(data);
+	node* new_node = Create_Node(data);
 
 	node* next_node = after_node->next;
 	new_node->next = next_node;
@@ -123,7 +123,7 @@ void add_after(linked_list* ll, node *after_node, void *data)
 	ll->size++;
 }
 
-void sort(linked_list *ll, int (*cmp)(void *data1, void *data2)) {
+void Sort(linked_list *ll, int (*cmp)(void *data1, void *data2)) {
 	node *i = ll->head;
 	while(i!=NULL) {
 		node *j = i->next;
@@ -131,7 +131,7 @@ void sort(linked_list *ll, int (*cmp)(void *data1, void *data2)) {
 			void * p1 = i->data;
 			void * p2 = j->data;
 			if((*cmp)(p1,p2) > 0) {
-				swap_nodes(i,j);
+				SwapNodes(i,j);
 			}
 			j=j->next;
 		}
@@ -139,7 +139,7 @@ void sort(linked_list *ll, int (*cmp)(void *data1, void *data2)) {
 	}
 }
 
-void swap_nodes(node *a, node *b) {
+void SwapNodes(node *a, node *b) {
 	void * temp = a->data;
 	a->data = b->data;
 	b->data = temp;
@@ -147,14 +147,14 @@ void swap_nodes(node *a, node *b) {
 
 // Queue Implementation //
 
-queue * create_queue() {
-	return create_linked_list();
+queue * CreateQueue() {
+	return Create_Linked_List();
 }
 
 // Enqueue function to add process at the end of the queue //
 void enqueue(queue* q, void * data)
 {
-	node* new_node = create_node(data);
+	node* new_node = Create_Node(data);
 	
 	new_node->prev = q->tail;
 	if(q->tail != NULL) {
@@ -171,25 +171,23 @@ void enqueue(queue* q, void * data)
 void* dequeue(queue* q)
 {
 	if(q->head != NULL) {
-		node * current_node = q->head;//Address of q->head
-		void * data = current_node->data;
+		node * curr_node = q->head;//Address of q->head
+		void * data = curr_node->data;
 
 		//Moving Head to next Node
 		node * next_node = q->head->next;
 
 		if(next_node != NULL) next_node->prev = NULL;
-		q->head = next_node; //current_node = q->head = next_node
+		q->head = next_node; //curr_node = q->head = next_node
 		
 
 		//Maintaining boundary tail condition
-		if(q->tail == current_node) {
+		if(q->tail == curr_node) {
 			q->tail = NULL;
 		}
 
 		q->size--;
-		free(current_node);
+		free(curr_node);
 		return data;
 	}
 }
-//
-
