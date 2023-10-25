@@ -25,11 +25,11 @@ int *PGCoptn = malloc(sizeof(int)*4);
     }else if(strcmp(Argumnt2[1], "LRU") == 0){
         AlgoFunction = LRU_FUNCTION;
     }else if(strcmp(Argumnt2[1], "LFU") == 0){
-        AlgoFunction = LFU_FUNCTION;
+        //AlgoFunction = LFU_FUNCTION;
     }else if(strcmp(Argumnt2[1], "MFU") == 0){
         AlgoFunction = MFU_FUNCTION;
     }else if(strcmp(Argumnt2[1], "Random") == 0){
-        AlgoFunction = R_FUNCTION;
+        //AlgoFunction = R_FUNCTION;
     }else {
 printf("####################################################################\n");
         printf("These are the options to run for simulation : FIFO, LRU, LFU, MFU or Random.\n");
